@@ -73,7 +73,8 @@ namespace NetworkInfrastructure.Web.Controllers
                         new Claim(ClaimTypes.Role, "Administrator"),
                     };
 
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme);
 
                 var authProperties = new AuthenticationProperties
                 {
