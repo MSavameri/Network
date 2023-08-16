@@ -1,0 +1,132 @@
+﻿@model NetworkInfrastructure.Web.Models.NetworkAssetDto
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="row g-2">
+    <div class="col-4">
+        <label class="form-label" for="ServerName">Server Name:</label>
+        <input type="text" asp-for="ServerName" class="form-control" disabled />
+
+        <label class="form-label" for="Ip">IP Address:</label>
+        <input type="text" asp-for="Ip" class="form-control" disabled />
+
+        <label class="form-label" for="BackupType">Backup Type:</label>
+        <input type="text" asp-for="BackupType" class="form-control" disabled />
+
+        <label class="form-label" for="ServiceOwner">Service Owner:</label>
+        <input type="text" asp-for="ServiceOwner" class="form-control" disabled />
+
+        <label class="form-label" for="OsType">Os Type:</label>
+        <input type="text" asp-for="OsType" class="form-control" disabled />
+
+        <label class="form-label" for="LocationName">Location Name:</label>
+        <input type="text" asp-for="LocationName" class="form-control" disabled />
+
+        <label class="form-label" for="Description">Description:</label>
+        <input type="text" asp-for="Description" class="form-control" disabled />       
+    </div>
+    <div class="col-4">
+        <label class="form-label" for="LastUpdate">Last Update:</label>
+        <input type="text" asp-for="LastUpdate" class="form-control" disabled />
+
+        <label class="form-label" for="ServerPort">Server Port:</label>
+        <input type="text" asp-for="ServerPort" class="form-control" disabled />
+
+        <label class="form-label" for="DateCreated">Date Created:</label>
+        <input type="text" asp-for="DateCreated" class="form-control" disabled />
+
+        <label class="form-label" for="UserName">User Name:</label>
+        <input type="text" asp-for="UserName" class="form-control" disabled />
+
+        <label class="form-label" for="UserName">User Name:</label>
+        <input type="text" asp-for="UserName" class="form-control" disabled />
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Monitoring" name="Monitoring" id="Monitoring" class="form-check-input" disabled />
+            <label class="form-check-label" for="Monitoring">Monitoring</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Limitation" name="Limitation" id="Limitation" class="form-check-input" disabled />
+            <label class="form-check-label" for="Limitation">Limitation</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="FirewallWindows" name="FirewallWindows" id="FirewallWindows" class="form-check-input" disabled />
+            <label class="form-check-label" for="FirewallWindows">FirewallWindows</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="NetBios" name="NetBios" id="NetBios" class="form-check-input" disabled />
+            <label class="form-check-label" for="NetBios">NetBios</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="FolderShare" name="FolderShare" id="FolderShare" class="form-check-input" disabled />
+            <label class="form-check-label" for="FolderShare">FolderShare</label>
+        </div>
+
+       
+    </div>
+    <div class="col-4">
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Mcafee" name="Mcafee" id="Mcafee" class="form-check-input" disabled />
+            <label class="form-check-label" for="Mcafee">Mcafee</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Activation" name="Activation" id="Activation" class="form-check-input" disabled />
+            <label class="form-check-label" for="Activation">Activation</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="SplunkAgent" name="SplunkAgent" id="SplunkAgent" class="form-check-input" disabled />
+            <label class="form-check-label" for="SplunkAgent">SplunkAgent</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="GroupPolicy" name="GroupPolicy" id="GroupPolicy" class="form-check-input" disabled />
+            <label class="form-check-label" for="GroupPolicy">GroupPolicy</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="AccessLists" name="AccessLists" id="AccessLists" class="form-check-input" disabled />
+            <label class="form-check-label" for="AccessLists">AccessLists</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="FtdDatacenter" name="FtdDatacenter" id="FtdDatacenter" class="form-check-input" disabled />
+            <label class="form-check-label" for="FtdDatacenter">FtdDatacenter</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="FtdInterne" name="FtdInterne" id="FtdInterne" class="form-check-input" disabled />
+            <label class="form-check-label" for="FtdInterne">FtdInterne</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Sophos" name="Sophos" id="Sophos" class="form-check-input" disabled />
+            <label class="form-check-label" for="Sophos">Sophos</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Waf" name="Waf" id="Waf" class="form-check-input" disabled />
+            <label class="form-check-label" for="Waf">Waf</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Asr" name="Asr" id="Asr" class="form-check-input" disabled />
+            <label class="form-check-label" for="Asr">Asr</label>
+        </div>
+
+        <div class="form-check form-switch mb-2">
+            <input type="checkbox" asp-for="Dns" name="Dns" id="Dns" class="form-check-input" disabled />
+            <label class="form-check-label" for="Dns">Dns</label>
+        </div>
+
+        <a asp-action="Index" asp-controller="Network" class="btn btn-dark">Back</a>
+        <a href="#" class="btn btn-success">Print</a>
+    </div>
+</div>
+

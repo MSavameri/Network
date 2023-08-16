@@ -1,0 +1,143 @@
+﻿@using NetworkInfrastructure.Web.Data.Entities;
+@model NetworkInfrastructure.Web.Models.NetworkAssetDto
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div asp-validation-summary="ModelOnly"></div>
+
+<form method="post" asp-action="Edit" asp-controller="Network" novalidate>
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="col-4">
+            <label for="ServerName" class="form-label">ServerName:</label>
+            <input type="text" asp-for="ServerName" class="form-control" />
+            <span asp-validation-for="ServerName" class="text-danger"></span>
+
+            <label for="Ip" class="form-label">IP Address:</label>
+            <input type="text" asp-for="Ip" class="form-control" />
+            <span asp-validation-for="Ip" class="text-danger"></span>
+
+            <label for="BackupType" class="form-label">Backup Type:</label>
+            <select asp-for="BackupType" asp-items="@Html.GetEnumSelectList<BackupType>()" class="form-control"></select>
+            <span asp-validation-for="BackupType" class="text-danger"></span>
+
+            <label for="OsType" class="form-label">Os Type:</label>
+            <select asp-for="OsType" asp-items="@Html.GetEnumSelectList<OsType>()" class="form-control"></select>
+            <span asp-validation-for="OsType" class="text-danger"></span>
+
+            <label for="LocationName" class="form-label">Location Name:</label>
+            <select asp-for="LocationName" asp-items="@Html.GetEnumSelectList<LocationName>()" class="form-control"></select>
+            <span asp-validation-for="LocationName" class="text-danger"></span>
+
+            <label for="ServiceOwner" class="form-label">Service Owner:</label>
+            <input type="text" asp-for="ServiceOwner" class="form-control" />
+            <span asp-validation-for="ServiceOwner" class="text-danger"></span>
+
+            <label for="Description" class="form-label">Description:</label>
+            <input type="text" asp-for="Description" class="form-control" />
+            <span asp-validation-for="Description" class="text-danger"></span>
+
+            <label for="LastUpdate" class="form-label">Last Update:</label>
+            <input type="date" asp-for="LastUpdate" class="form-control" />
+            <span asp-validation-for="LastUpdate" class="text-danger"></span>
+
+            <label for="ServerPort" class="form-label">Server Port:</label>
+            <input type="text" asp-for="ServerPort" class="form-control" />
+            <span asp-validation-for="ServerPort" class="text-danger"></span>
+
+            <input type="hidden" asp-for="UserName" />
+        </div>
+
+        <div class="col-4">
+            <div class="row">
+                <div class="col-6">
+                    <label for="Monitoring" class="form-label">Monitoring:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Monitoring" class="form-check-input" />
+                    </div>
+
+                    <label for="Limitation" class="form-label">Limitation:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Limitation" class="form-check-input" />
+                    </div>
+
+                    <label for="FirewallWindows" class="form-label">FirewallWindows:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="FirewallWindows" class="form-check-input" />
+                    </div>
+
+                    <label for="NetBios" class="form-label">NetBios:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="NetBios" class="form-check-input" />
+                    </div>
+
+                    <label for="FolderShare" class="form-label">FolderShare:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="FolderShare" class="form-check-input" />
+                    </div>
+
+                    <label for="Mcafee" class="form-label">Mcafee:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Mcafee" class="form-check-input" />
+                    </div>
+
+                    <label for="Activation" class="form-label">Activation:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Activation" class="form-check-input" />
+                    </div>
+
+                    <label for="SplunkAgent" class="form-label">SplunkAgent:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="SplunkAgent" class="form-check-input" />
+                    </div>
+
+                    <label for="GroupPolicy" class="form-label">GroupPolicy:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="GroupPolicy" class="form-check-input" />
+                    </div>
+
+                    <label for="AccessLists" class="form-label">AccessLists:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="AccessLists" class="form-check-input" />
+                    </div>
+
+                    <label for="FtdDatacenter" class="form-label">FtdDatacenter:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="FtdDatacenter" class="form-check-input" />
+                    </div>
+                   
+                </div>
+                <div class="col-6">
+                    <label for="FtdInterne" class="form-label">FtdInterne:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="FtdInterne" class="form-check-input" />
+                    </div>
+
+                    <label for="Sophos" class="form-label">Sophos:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Sophos" class="form-check-input" />
+                    </div>
+                    <label for="Waf" class="form-label">Waf:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Waf" class="form-check-input" />
+                    </div>
+                    <label for="Asr" class="form-label">Asr:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Asr" class="form-check-input" />
+                    </div>
+                    <label for="Dns" class="form-label">Dns:</label>
+                    <div class="form-check form-switch">
+                        <input type="checkbox" asp-for="Dns" class="form-check-input" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-success">Save</button>
+    <a asp-action="Index" asp-controller="Network" class="btn btn-dark">Back</a>
+</form>
+
+
+
+

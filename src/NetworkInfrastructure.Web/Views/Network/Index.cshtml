@@ -1,0 +1,51 @@
+﻿@model IEnumerable<NetworkInfrastructure.Web.Models.NetworkAssetDto>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row g-2">
+    <div cite="col-12">
+        <a asp-action="Create" asp-controller="Network" class="btn btn-primary mb-3">Create</a>
+
+        @if (Model.Any())
+        {
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <td>ServerName</td>
+                        <td>Ip</td>
+                        <td>BackupType</td>
+                        <td>ServiceOwner</td>
+                        <td>OsType</td>
+                        <td>LocationName</td>
+                        <td>ServerPort</td>
+                        <td>LastUpdate</td>
+                        <td>UserName</td>
+                        <td>Operations</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.ServerName</td>
+                            <td>@item.Ip</td>
+                            <td>@item.BackupType</td>
+                            <td>@item.ServiceOwner</td>
+                            <td>@item.OsType</td>
+                            <td>@item.LocationName</td>
+                            <td>@item.ServerPort</td>
+                            <td>@item.LastUpdate</td>
+                            <td>@item.UserName</td>
+                            <td>
+                                <a asp-action="Details" asp-controller="Network" asp-route-id="@item.Id" class="btn btn-sm btn-info">Details</a> |
+                                <a asp-action="Edit" asp-controller="Network" asp-route-id="@item.Id" class="btn btn-sm btn-success">Edit</a> |
+                                <a asp-action="Delete" asp-controller="Network" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
