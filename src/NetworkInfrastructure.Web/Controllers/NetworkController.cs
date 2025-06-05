@@ -11,6 +11,7 @@ using AutoMapper;
 using NetworkInfrastructure.Web.Data.Entities;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
 namespace NetworkInfrastructure.Web.Controllers
 {
@@ -24,13 +25,15 @@ namespace NetworkInfrastructure.Web.Controllers
         private readonly IValidator<NetworkAssetDto> _netValidator;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        private readonly ILogger<NetworkController> _logger;
 
         public NetworkController(INetworkService networkService,
             IUserService userService,
             IValidator<UserDto> validator,
             IConfiguration configuration,
             IMapper mapper,
-            IValidator<NetworkAssetDto> netValidator)
+            IValidator<NetworkAssetDto> netValidator,
+            ILogger<NetworkController> logger)
         {
             _networkService = networkService;
             _userService = userService;
@@ -38,6 +41,7 @@ namespace NetworkInfrastructure.Web.Controllers
             _configuration = configuration;
             _mapper = mapper;
             _netValidator = netValidator;
+            _logger = logger;
         }
 
         [AllowAnonymous]
@@ -60,6 +64,7 @@ namespace NetworkInfrastructure.Web.Controllers
 
             if (!validate.IsValid)
             {
+                _logger.LogWarning("Login validation failed for user {UserName}.", user.UserName);
                 validate.AddToModelState(this.ModelState);
                 return View(user);
             }
@@ -104,9 +109,11 @@ namespace NetworkInfrastructure.Web.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
+                _logger.LogInformation("User {UserName} logged in successfully.", user.UserName);
                 return RedirectToAction(nameof(Index));
             }
 
+            _logger.LogWarning("Invalid login attempt for user {UserName}.", user.UserName);
             ViewData["ErrMesage"] = "Invalid login attempt.";
 
             return View(user);
@@ -148,23 +155,40 @@ namespace NetworkInfrastructure.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(NetworkAssetDto model)
         {
-            var validate = _netValidator.Validate(model);
-
-            if (!validate.IsValid)
+            _logger.LogInformation("Attempting to create network asset with ServerName: {ServerName}", model.ServerName);
+            try
             {
-                validate.AddToModelState(this.ModelState);
-                return View(model);
+                var validate = _netValidator.Validate(model);
+
+                if (!validate.IsValid)
+                {
+                    _logger.LogWarning("Validation failed for creating network asset with ServerName: {ServerName}", model.ServerName);
+                    validate.AddToModelState(this.ModelState);
+                    return View(model);
+                }
+
+                model.UserName = string.IsNullOrEmpty(ClaimTypes.Name)
+                    ? throw new ArgumentNullException(nameof(User))
+                    : User.FindFirstValue(claimType: ClaimTypes.Name);
+
+                var mapper = _mapper.Map<NetworkAsset>(model);
+
+                await _networkService.AddAsync(mapper);
+                _logger.LogInformation("Successfully created network asset with ServerName: {ServerName}, ID: {Id}", model.ServerName, mapper.Id);
+                return RedirectToAction(nameof(Index));
             }
-
-            model.UserName = string.IsNullOrEmpty(ClaimTypes.Name)
-                ? throw new ArgumentNullException(nameof(User))
-                : User.FindFirstValue(claimType: ClaimTypes.Name);
-
-            var mapper = _mapper.Map<NetworkAsset>(model);
-
-            await _networkService.AddAsync(mapper);
-
-            return RedirectToAction(nameof(Index));
+            catch (ArgumentNullException ex)
+            {
+                _logger.LogError(ex, "ArgumentNullException while creating network asset {ServerName}: User claim for UserName was null or empty.", model.ServerName);
+                // Potentially return a specific error view or message
+                throw; // Re-throwing as it's a critical issue for this action
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while creating network asset {ServerName}.", model.ServerName);
+                // Handle appropriately, maybe return an error view
+                return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier }); // Assuming you have an ErrorViewModel
+            }
         }
 
         public async Task<IActionResult> Details(Guid id)
@@ -190,12 +214,22 @@ namespace NetworkInfrastructure.Web.Controllers
         {
             if (id == null || id == Guid.Empty)
             {
+                _logger.LogWarning("DeleteAsync called with null or empty ID.");
                 throw new ArgumentNullException(nameof(id));
             }
-
-            await _networkService.DeleteAsync(id);
-
-            return RedirectToAction(nameof(Index));
+            _logger.LogInformation("Attempting to delete network asset with ID: {Id}", id);
+            try
+            {
+                await _networkService.DeleteAsync(id);
+                _logger.LogInformation("Successfully deleted network asset with ID: {Id}", id);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while deleting network asset with ID: {Id}", id);
+                // Handle appropriately, maybe return an error view
+                return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier }); // Assuming you have an ErrorViewModel
+            }
         }
 
 
@@ -221,19 +255,30 @@ namespace NetworkInfrastructure.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(NetworkAssetDto model)
         {
-            var validate = _netValidator.Validate(model);
-
-            if (!validate.IsValid)
+            _logger.LogInformation("Attempting to edit network asset with ID: {Id}", model.Id);
+            try
             {
-                validate.AddToModelState(this.ModelState);
-                return View(model);
+                var validate = _netValidator.Validate(model);
+
+                if (!validate.IsValid)
+                {
+                    _logger.LogWarning("Validation failed for editing network asset with ID: {Id}", model.Id);
+                    validate.AddToModelState(this.ModelState);
+                    return View(model);
+                }
+
+                var mapper = _mapper.Map<NetworkAsset>(model);
+
+                await _networkService.EditAsync(mapper);
+                _logger.LogInformation("Successfully edited network asset with ID: {Id}", model.Id);
+                return RedirectToAction(nameof(Index));
             }
-
-            var mapper = _mapper.Map<NetworkAsset>(model);
-
-            await _networkService.EditAsync(mapper);
-
-            return RedirectToAction(nameof(Index));
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Exception occurred while editing network asset with ID: {Id}", model.Id);
+                // Handle appropriately, maybe return an error view
+                return View("Error", new ErrorViewModel { RequestId = HttpContext.TraceIdentifier }); // Assuming you have an ErrorViewModel
+            }
         }
     }
 }
