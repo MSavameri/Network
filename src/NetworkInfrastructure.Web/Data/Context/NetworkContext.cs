@@ -7,7 +7,7 @@ namespace NetworkInfrastructure.Web.Data.Context
     {
         public NetworkContext(DbContextOptions<NetworkContext> option) : base(option) { }
 
-        public DbSet<NetworkAsset> NetworkAssets { get; set; }
+        public DbSet<NetworkAsset> NetworkAssets { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -32,7 +32,7 @@
                         </li>
                     </ul>
 
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <form class="d-flex" method="get" asp-action="Index" asp-controller="Network">
                             @Html.AntiForgeryToken()

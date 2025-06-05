@@ -73,7 +73,7 @@ namespace NetworkInfrastructure.Web.Controllers
             {
                 var claims = new List<Claim>
                     {
-                        new Claim(ClaimTypes.Name, user.UserName),
+                        new Claim(ClaimTypes.Name, user.UserName!),
                         //new Claim("FullName", user.UserName),
                         new Claim(ClaimTypes.Role, "Administrator"),
                     };
@@ -135,11 +135,11 @@ namespace NetworkInfrastructure.Web.Controllers
 
             if (!string.IsNullOrEmpty(search))
             {
-                query = query.Where(x => x.ServerName.Contains(search) ||
-                x.Ip.Contains(search) ||
-                x.Description.Contains(search) ||
-                x.ServerPort.Contains(search) ||
-                x.ServiceOwner.Contains(search)).ToList();
+                query = query.Where(x => (x.ServerName?.Contains(search) ?? false) ||
+                                         (x.Ip?.Contains(search) ?? false) ||
+                                         (x.Description?.Contains(search) ?? false) ||
+                                         (x.ServerPort?.Contains(search) ?? false) ||
+                                         (x.ServiceOwner?.Contains(search) ?? false)).ToList();
             }
 
             var mapper = _mapper.Map<List<NetworkAssetDto>>(query);
@@ -155,6 +155,7 @@ namespace NetworkInfrastructure.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(NetworkAssetDto model)
         {
+            // Test recompilation
             _logger.LogInformation("Attempting to create network asset with ServerName: {ServerName}", model.ServerName);
             try
             {
@@ -167,9 +168,14 @@ namespace NetworkInfrastructure.Web.Controllers
                     return View(model);
                 }
 
-                model.UserName = string.IsNullOrEmpty(ClaimTypes.Name)
-                    ? throw new ArgumentNullException(nameof(User))
-                    : User.FindFirstValue(claimType: ClaimTypes.Name);
+                model.UserName = User.FindFirstValue(claimType: ClaimTypes.Name);
+
+                if (string.IsNullOrEmpty(model.UserName))
+                {
+                    _logger.LogError("User name claim is missing, cannot create network asset.");
+                    // Or handle as a bad request, or redirect to login, etc.
+                    throw new InvalidOperationException("User name claim is missing. Cannot create network asset.");
+                }
 
                 var mapper = _mapper.Map<NetworkAsset>(model);
 
@@ -193,7 +199,7 @@ namespace NetworkInfrastructure.Web.Controllers
 
         public async Task<IActionResult> Details(Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -212,7 +218,7 @@ namespace NetworkInfrastructure.Web.Controllers
 
         public async Task<IActionResult> Delete(Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 _logger.LogWarning("DeleteAsync called with null or empty ID.");
                 throw new ArgumentNullException(nameof(id));
@@ -235,7 +241,7 @@ namespace NetworkInfrastructure.Web.Controllers
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(id));
             }
