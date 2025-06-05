@@ -27,7 +27,7 @@ namespace NetworkInfrastructure.Web.Data.Services
 
         public async Task DeleteAsync(Guid id)
         {
-            if (id == null || id == Guid.Empty)
+            if (id == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(id));
             }
@@ -61,9 +61,9 @@ namespace NetworkInfrastructure.Web.Data.Services
             return await _context.NetworkAssets.AsNoTracking().ToListAsync();
         }
 
-        public async Task<NetworkAsset> GetAsync(Guid id)
+        public async Task<NetworkAsset?> GetAsync(Guid id)
         {
-            if(id ==null || id == Guid.Empty)
+            if(id == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(id));
             }

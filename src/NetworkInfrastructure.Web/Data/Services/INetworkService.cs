@@ -6,7 +6,7 @@ namespace NetworkInfrastructure.Web.Data.Services
     {
         Task<List<NetworkAsset>> GetAllAsync();
 
-        Task<NetworkAsset> GetAsync(Guid id);
+        Task<NetworkAsset?> GetAsync(Guid id);
 
         Task AddAsync(NetworkAsset entity);
 
